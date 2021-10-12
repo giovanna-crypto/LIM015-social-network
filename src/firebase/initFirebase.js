@@ -6,7 +6,7 @@
   messagingSenderId: '45913824265',
   appId: '1:45913824265:web:c0bdb3536c2081e6b1ecd8',
 };
-firebase.initializeApp(firebaseConfig); */
+firebase.initializeApp(firebaseConfig);
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
@@ -25,3 +25,4 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+*/

@@ -1,4 +1,4 @@
-// función para logearse con google
+/* / función para logearse con google
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -16,3 +16,4 @@ export async function login() {
 export function logout() {
   firebase.auth().signOut();
 }
+ */
