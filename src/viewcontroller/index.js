@@ -1,15 +1,15 @@
-import { components } from '../view/index1.js';
+import { components } from '../view/componentes.js';
 
 const changeView = (route) => {
   const container = document.getElementById('container');
   container.innerHTML = '';
   switch (route) {
-    case '#/':
-      return container.appendChild(components.home());
-    case '#/catalogo':
-      return container.appendChild(components.catalogo());
-    default: return console.log('hola');
+    case '#/': container.appendChild(components.home());
+      break;
+    case '#/catalogo': container.appendChild(components.catalogo());
+      break;
+    default:
   }
-  // console.log(route);
+  return container;
 };
 export { changeView };
