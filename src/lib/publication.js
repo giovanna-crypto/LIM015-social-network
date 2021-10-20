@@ -6,7 +6,7 @@
 // eslint-disable-next-line import/named
 // import { modaldeletePost } from './cerrarSesion.js';
 import { getCurrentUser } from '../firebase/firebase-fn.js';
-import { getEachPostUser, deletePost, updatePosts } from '../firebase/firestore.js';
+import { deletePost, updatePosts } from '../firebase/firestore.js';
 // import { createPost, getPost, getCurrentUser } from '../firebase/firebase-fn.js';
 
 export default () => {
@@ -24,6 +24,7 @@ export default () => {
   const uniqueId = getCurrentUser().uid;
   const photo = getCurrentUser().photo;
   const email = getCurrentUser().email;
+
   // console.log(uniqueId);
   // creando seccion de publicar y leer contenido
   const writeAndReadPost = document.createElement('article');
@@ -47,67 +48,92 @@ export default () => {
   writeAndReadPost.innerHTML = textToPost;
   /* PARA MOSTRAR LAS PUBLICACIONES HECHAS */
   const getPost = () => {
-    const collection = getEachPostUser(uniqueId);
     const publicPost = writeAndReadPost.querySelector('.allPublicPost');
+    /* const collection = getEachPostUser(uniqueId);
+    console.log(collection);
     collection.onSnapshot((item) => {
       publicPost.innerHTML = '';
       item.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data());
-        console.log(doc.data().post);
-        const readPostSection = document.createElement('section');
-        readPostSection.className = 'publicPost';
-        readPostSection.innerHTML = `
+        console.log(doc.data().post); */
+    // seguunda prueba
+    // const onSnapshot2 = () => {
+    firebase.firestore().collection('postPruebaNadia').orderBy('time', 'desc')
+      .onSnapshot((resultados) => {
+        publicPost.innerHTML = '';
+        console.log(resultados.docs);
+        const datos = resultados.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log("Todos los datos de la colección 'postPruebaNadia'", datos);
+        datos.forEach((doc) => {
+          // console.log(doc.id);
+          const readPostSection = document.createElement('section');
+          readPostSection.className = 'publicPost';
+          readPostSection.innerHTML = `
         <section id="userWhoPosted">
           <section class="infoUserWhoPosted">
-            <img id ="userPhoto" src= ${photo === null ? '../img/chica.jpg' : photo} width="20px" height="20px" alt="Foto de perfil">
-            <p class="userName">${name == null ? email : name}</p>
+            <img id ="userPhoto" src= ${doc.photo === null ? '../img/chica.jpg' : doc.photo} width="20px" height="20px" alt="Foto de perfil">
+            <p class="userName">${doc.name === undefined ? doc.email : doc.name}</p>
             </section>
           <section id="userContentPosted">
-            <p id='${doc.id}' class="textPosted">${doc.data().post}</p>
-            <p id='${doc.id}' class="datePosted">${doc.data().time}</p>
+            <p id='${doc.uid}' class="textPosted">${doc.post}</p>
+            <p id='${doc.uid}' class="datePosted">tiempo</p>
           </section>
           <section id="likeToPost">
-          <button type="button" id='${doc.id}' class="btnLike">Like </button>
-          <button type="button" id='${doc.id}' class="btnDelete">Delete </button>
-          <button type="button" id='${doc.id}' class="btnEdit" >Edit </button>
+          <button type="button" id='${doc.uid}' class="btnLike">Like </button>
+          <button type="button" id='${doc.uid}' class="btnDelete">Delete </button>
+          <button type="button" id='${doc.uid}' class="btnEdit" >Edit </button>
           <p type="text">0</p>
           </section>
         </section>`;
 
-        const btnDelete = readPostSection.querySelector('.btnDelete');
-        // eliminar post
-        btnDelete.addEventListener('click', () => {
-          // eslint-disable-next-line no-alert
-          const confirmar = window.confirm('¿Estás seguro de que deseas borrar este post?');
-          if (confirmar) {
-            deletePost(doc.id);
-            console.log(deletePost(doc.id));
-          }
-        });
+          // console.log(publicPost);
+          // publicPost.innerHTML += readPost;
+          // return publicPost.appendChild(readPostSection);
+          // });
+          const btnDelete = readPostSection.querySelector('.btnDelete');
+          // console.log(btnDelete);
+          // eliminar post
+          btnDelete.addEventListener('click', () => {
+            if (email === doc.email) {
+              // eslint-disable-next-line no-alert
+              const confirmar = window.confirm('¿Estás seguro de que deseas borrar este post?');
+              if (confirmar) {
+                deletePost(doc.id);
+                console.log(deletePost(doc.id));
+              }
+            } else {
+              console.log('no funciona');
+            }
+          });
 
-        const btnEdit = readPostSection.querySelector('.btnEdit');
+          const btnEdit = readPostSection.querySelector('.btnEdit');
 
-        btnEdit.addEventListener('click', () => {
-          // const idPost = doc.data().uid;
-          const publication = writeAndReadPost.querySelector('#contentTextPost');
-          // publication.readOnly = false;
-          const btnGuardar = writeAndReadPost.querySelector('#compartirPost');
-          btnGuardar.innerHTML = 'Guardar';
-          publication.value = doc.data().post;
-          writeAndReadPost.querySelector('#contentTextPost').innerHTML = publication;
 
-          btnGuardar.addEventListener('click', () => {
-            const nuevoText = writeAndReadPost.querySelector('#contentTextPost').value;
-            const actualizacionpost = updatePosts(nuevoText);
-            /* .then(() => {
+          btnEdit.addEventListener('click', () => {
+            const idPost = doc.uid;
+            const publication = writeAndReadPost.querySelector('#contentTextPost');
+            // publication.readOnly = false;
+            const btnGuardar = writeAndReadPost.querySelector('#compartirPost');
+            btnGuardar.innerHTML = 'Guardar';
+            publication.value = doc.post;
+            writeAndReadPost.querySelector('#contentTextPost').innerHTML = publication;
+
+            btnGuardar.addEventListener('click', () => {
+              const nuevoText = writeAndReadPost.querySelector('#contentTextPost').value;
+              const actualizacionpost = updatePosts(idPost, nuevoText);
+              /* .then(() => {
                 publication.innerHTML = nuevoText;
               }); */
-            return actualizacionpost;
+              return actualizacionpost;
+            });
           });
+          publicPost.appendChild(readPostSection);
         });
-        publicPost.appendChild(readPostSection);
+
       });
-    });
   };
   getPost();
 
@@ -122,7 +148,7 @@ export default () => {
       alert('Por ingrese contenido a su publicación');
     } else {
       const createPost = (postText, photoPost, emailPost, uidPost) => {
-        // createPost(contentTextPost, photo, email, uniqueId)
+        //  createPost(contentTextPost, photo, email, uniqueId)
         const db = firebase.firestore();
         db.collection('postPruebaNadia').doc().set({
           post: postText,
@@ -130,6 +156,7 @@ export default () => {
           photo: photoPost,
           email: emailPost,
           uid: uidPost,
+          // name: namePost,
         })
           .then(() => {
             console.log('publicacion exitosa');
@@ -137,9 +164,10 @@ export default () => {
           .catch((error) => {
             console.error(`Error creando el post => ${error}`);
           });
+
         getPost();
       };
-      createPost(contentTextPost, photo, email, uniqueId);
+      createPost(contentTextPost, photo, email, uniqueId, name);
       writeAndReadPost.querySelector('#contentTextPost').value = '';
     }
   });
