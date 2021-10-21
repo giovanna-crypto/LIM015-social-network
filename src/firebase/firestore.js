@@ -17,44 +17,31 @@ export const catchUserInfo = (captureName, captureLastName, captureEmail, captur
 };
 
 /* **********Función para crear y guardar post en la base de datos********** */
-export const createPost = (postText, photoPost, emailPost, uidPost, namePost) => {
+export const createPost = (postText, photoPost, emailPost, namePost, uidPost) => {
   // const fieldValue = firebase.firestore.FieldValue;
   db.collection('postPruebaNadia').doc().set({
     post: postText,
     time: firebase.firestore.FieldValue.serverTimestamp(),
     photo: photoPost,
     email: emailPost,
-    uid: uidPost,
     name: namePost,
-    /* }).then(() => {
-      console.log('publicacion exitosa');
-    })
-      .catch((error) => {
-        console.error(`Error creando el post => ${error}`);
-      }); */
-  });
+    uid: uidPost,
+  }).then(() => {
+    console.log('publicacion exitosa');
+  })
+    .catch((error) => {
+      console.error(`Error creando el post => ${error}`);
+    });
 };
-/* funcion para traer todos los post */
+
+/* Para leer post */
+export const getAllPost = db.collection('postPruebaNadia').orderBy('time', 'desc');
+
+/* funcion para traer todos los post del usuario actual */
 export const getEachPostUser = (id) => db.collection('postPruebaNadia')
   .where('uid', '==', id)
   .orderBy('time', 'desc');
 
-// Metodo  (snapshot)
-/* export const onSnapshot2 = () => {
-  db.collection('postPruebaNadia')
-    .onSnapshot((resultados) => {
-      console.log(resultados.docs);
-      const datos = resultados.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      console.log("Todos los datos de la colección 'postPruebaNadia'", datos);
-      datos.forEach((doc) => {
-        console.log(doc.id);
-      });
-    });
-};
-console.log(onSnapshot2()); */
 /* export const allPost = () => db.collection('postPruebaNadia')
   .onSnapshot((resultados) => {
     console.log(resultados.docs);
