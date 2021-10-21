@@ -17,7 +17,7 @@ export const catchUserInfo = (captureName, captureLastName, captureEmail, captur
 };
 
 /* **********Función para crear y guardar post en la base de datos********** */
-export const createPost = (postText, photoPost, emailPost, uidPost) => {
+export const createPost = (postText, photoPost, emailPost, uidPost, namePost) => {
   // const fieldValue = firebase.firestore.FieldValue;
   db.collection('postPruebaNadia').doc().set({
     post: postText,
@@ -25,6 +25,7 @@ export const createPost = (postText, photoPost, emailPost, uidPost) => {
     photo: photoPost,
     email: emailPost,
     uid: uidPost,
+    name: namePost,
     /* }).then(() => {
       console.log('publicacion exitosa');
     })
@@ -33,37 +34,13 @@ export const createPost = (postText, photoPost, emailPost, uidPost) => {
       }); */
   });
 };
-/* comentario
-export const createComment = (commentText, photoPost, emailPost, uidPost) => {
-  // const fieldValue = firebase.firestore.FieldValue;
-  db.collection('commentGio').doc().set({
-    comment: commentText,
-    time: firebase.firestore.FieldValue.serverTimestamp(),
-    photo: photoPost,
-    email: emailPost,
-    uid: uidPost,
-    }).then(() => {
-      console.log('publicacion exitosa');
-    })
-      .catch((error) => {
-        console.error(`Error creando el post => ${error}`);
-      });
-  });
-};
-*/
-
 /* funcion para traer todos los post */
 export const getEachPostUser = (id) => db.collection('postPruebaNadia')
   .where('uid', '==', id)
   .orderBy('time', 'desc');
 
 // Metodo  (snapshot)
-export const onSnapShot = () => {
-  const getPostOnFirestore = db.collection('postPruebaNadia').onSnapshot();
-  console.log(getPostOnFirestore);
-  return getPostOnFirestore;
-};
-export const onSnapshot2 = () => {
+/* export const onSnapshot2 = () => {
   db.collection('postPruebaNadia')
     .onSnapshot((resultados) => {
       console.log(resultados.docs);
@@ -72,9 +49,29 @@ export const onSnapshot2 = () => {
         ...doc.data(),
       }));
       console.log("Todos los datos de la colección 'postPruebaNadia'", datos);
+      datos.forEach((doc) => {
+        console.log(doc.id);
+      });
     });
 };
-onSnapshot2();
+console.log(onSnapshot2()); */
+/* export const allPost = () => db.collection('postPruebaNadia')
+  .onSnapshot((resultados) => {
+    console.log(resultados.docs);
+    const datos = resultados.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return datos;
+    //   console.log("Todos los datos de la colección 'postPruebaNadia'", datos);
+    //  const nuevoDato = datos.map((item) => {
+    //    console.log(item.post);
+    //    return item.post;
+    //  });
+    //  return nuevoDato;
+  });
+    });
+}; */
 
 // para eliminar post
 export const deletePost = (id) => db.collection('postPruebaNadia').doc(id).delete()
@@ -82,7 +79,7 @@ export const deletePost = (id) => db.collection('postPruebaNadia').doc(id).delet
   .catch((error) => console.error('Error eliminando documento', error));
 
 // para editar post
-export const editarPosts = (postText, photoPost, emailPost, uidPost) => {
+/* export const editarPosts = (postText, photoPost, emailPost, uidPost) => {
   const dataPost = db.collection('postPruebaNadia').doc();
   return dataPost.update({
     post: postText,
@@ -91,10 +88,10 @@ export const editarPosts = (postText, photoPost, emailPost, uidPost) => {
     email: emailPost,
     uid: uidPost,
   });
-};
+}; */
 
-export function updatePosts(postText) {
-  return db.collection('postPruebaNadia').doc(doc.uid).update({
+export function updatePosts() {
+  return db.collection('postPruebaNadia').doc(uid).update({
     post: postText,
     time: new Date().toLocaleString('en-ES'),
   }).then(() => {
