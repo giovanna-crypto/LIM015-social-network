@@ -70,7 +70,7 @@ export default () => {
         <section id="userWhoPosted">
           <section class="infoUserWhoPosted">
             <img id ="userPhoto" src= ${doc.photo === null ? '../img/chica.jpg' : doc.photo} width="20px" height="20px" alt="Foto de perfil">
-            <p class="userName">${doc.name === undefined ? doc.email : doc.name}</p>
+            <p class="userName">${doc.name === null ? doc.email : doc.name}</p>
             </section>
           <section id="userContentPosted">
             <p id='${doc.uid}' class="textPosted">${doc.post}</p>
