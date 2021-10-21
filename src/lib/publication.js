@@ -128,7 +128,7 @@ export default () => {
       // eslint-disable-next-line no-alert
       alert('Por ingrese contenido a su publicación');
     } else {
-      const createPost = (postText, photoPost, emailPost, uidPost) => {
+      const createPost = (postText, photoPost, emailPost, namePost, uidPost) => {
         // createPost(contentTextPost, photo, email, uniqueId)
         const db = firebase.firestore();
         db.collection('postPruebaNadia').doc().set({
@@ -136,6 +136,7 @@ export default () => {
           time: firebase.firestore.FieldValue.serverTimestamp(),
           photo: photoPost,
           email: emailPost,
+          name: namePost,
           uid: uidPost,
         })
           .then(() => {
@@ -146,7 +147,7 @@ export default () => {
           });
         getPost();
       };
-      createPost(contentTextPost, photo, email, uniqueId);
+      createPost(contentTextPost, photo, email, name, uniqueId);
       writeAndReadPost.querySelector('#contentTextPost').value = '';
     }
   });
