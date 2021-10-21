@@ -64,6 +64,16 @@ export default () => {
           <button type="button" id='${doc.id}' class="btnLike">Like </button>
           <p type="text">0</p>
           </section>
+          <section id="commentSec"><section id="commentando">
+          <img class="userPhotoComment" src="${getCurrentUser().photo === null ? '../img/chica.jpg' : getCurrentUser().photo}" width= "25">
+          <form class="formComenta">
+            <input id="commentText-${doc.id}" class="icontextComment" placeholder="Escribe tu comentario..."></input>
+            <section id="userContentComment">
+            <p id='${doc.id}' class="textComment">${doc.data().comment}</p>
+            <p id='${doc.id}' class="dateComment">${getDate(doc.data().time.toDate())}</p>
+          </section>
+            <button type="button" id='comentarPost'>Comentar</button>
+          </section>
         </section>`;
 
         // console.log(publicPost);
@@ -73,6 +83,8 @@ export default () => {
     });
   };
   getPost();
+  const btnComentar = writeAndReadPost.querySelector('#comentarPost');
+  console.log(btnComentar);
 
   const btnCompartir = writeAndReadPost.querySelector('#compartirPost');
   // console.log(btnCompartir);
@@ -107,37 +119,5 @@ export default () => {
     }
   });
 
-  /* getEachPostUser(uniqueId).then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data());
-      console.log(doc.data().post);
-      // getEachPostUser(uniqueId).onSnapshot((querySnapshot) => {
-    //querySnapshot.forEach((doc) => {
-      const readPost = `
-            <!-- SECCION DE  PUBLICACIONES / LO QUE SE POSTEO TODOS-->
-            <section id="wallAllPost">
-              <section class="eachPost">
-                <section id="userWhoPosted">
-                <p>${name == null ? email : name}</p>
-              </section>
-              <section id="userContentPosted">
-                <p id='${doc.id}'>${doc.data().post}</p>
-              </section>
-              <section id="likeToPost">
-              <button type="button" id='${doc.id}' class="btnLike">Like </button>
-              <p type="text">0</p>
-              </section>
-            </section>
-          </section>`;
-      const publicPost = writeAndReadPost.querySelector('.publicPost');
-      // console.log(publicPost);
-      publicPost.innerHTML += readPost;
-    });
-  })
-    .catch((error) => {
-      console.log('Error: ', error);
-    }); */
-  // });
   return writeAndReadPost;
 };

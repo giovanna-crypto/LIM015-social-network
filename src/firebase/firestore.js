@@ -32,6 +32,24 @@ export const createPost = (postText, photoPost, emailPost, uidPost) => {
       }); */
   });
 };
+/* comentario */
+export const createComment = (commentText, photoPost, emailPost, uidPost) => {
+  // const fieldValue = firebase.firestore.FieldValue;
+  db.collection('commentGio').doc().set({
+    comment: commentText,
+    time: firebase.firestore.FieldValue.serverTimestamp(),
+    photo: photoPost,
+    email: emailPost,
+    uid: uidPost,
+    /* }).then(() => {
+      console.log('publicacion exitosa');
+    })
+      .catch((error) => {
+        console.error(`Error creando el post => ${error}`);
+      }); */
+  });
+};
+
 /* funcion para traer todos los post */
 export const getEachPostUser = (id) => db.collection('postPruebaNadia')
   .where('uid', '==', id)
@@ -56,19 +74,30 @@ export const onSnapshot2 = () => {
 };
 onSnapshot2();
 
-/* export const getUserInfo = () => {
-  db.collection('pruebaNadia')
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        console.log(`${doc.id}=>${JSON.stringify(doc.data().name)}`);
-      });
-      console.log('Document written with ID: ', docRef.id);
-      console.log(docRef);
-    })
-    .catch((error) => {
-      console.error('Error adding document: ', error);
+//  FUNCION PARA COMENTARIOS
+// ----- Agregar/actualizar field en un documento de la colección posts -----
+export const updateDocComment = (postID, commentID, newField) => {
+  const dtb = firebase.firestore();
+  return dtb.collection('posts').doc(postID)
+    .collection('comment')
+    .doc(commentID)
+    .update(newField);
+};
+
+export const allComments = (idPost, callback) => firebase.firestore().collection(`posts/${idPost}/comment`)
+  .orderBy('date', 'asc').onSnapshot((querySnapshot) => {
+    const comment = [];
+    querySnapshot.forEach((doc) => {
+      // console.log(doc.id, doc.data());
+      comment.push({ id: doc.id, ...doc.data() });
     });
-}; */
-// getUserInfo();
-// catchUserInfo();
+    callback(comment);
+    // console.log('Posts: ', post.join(', '));
+  });
+// borrar COMENTARIO
+export const deleteCommentFirebase = (idPost, idComment) => {
+  const dbb = firebase.firestore();
+  return dbb.collection('posts').doc(idPost).collection('comment')
+    .doc(idComment)
+    .delete();
+};

@@ -10,7 +10,16 @@ body {
   font-family: "Roboto", sans-serif;
   min-height: 100vh;
 }
-
+.icontextComment::placeholder{
+  background-image: url(./img/comentar.png);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+.icontextComment {
+  background-color: rgb(250, 212, 215);
+  border: 0.1em solid #d3057de5;
+}
 /*************************CONTAINER*****************************************/
 #container {
   width: 90%;
@@ -238,6 +247,7 @@ nav ul li {
   flex-direction: column;
   width: 50%;
 }
+
 #photoPortada {
   display: none;
   display: flex;
