@@ -1,6 +1,12 @@
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable no-param-reassign */
+/* eslint-disable func-names */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 // eslint-disable-next-line import/named
-import { getCurrentUser, getDate } from '../firebase/firebase-fn.js';
-import { getEachPostUser } from '../firebase/firestore.js';
+// import { modaldeletePost } from './cerrarSesion.js';
+import { getCurrentUser } from '../firebase/firebase-fn.js';
+import { getEachPostUser, deletePost, updatePosts } from '../firebase/firestore.js';
 // import { createPost, getPost, getCurrentUser } from '../firebase/firebase-fn.js';
 
 export default () => {
@@ -58,10 +64,12 @@ export default () => {
             </section>
           <section id="userContentPosted">
             <p id='${doc.id}' class="textPosted">${doc.data().post}</p>
-            <p id='${doc.id}' class="datePosted">${getDate(doc.data().time.toDate())}</p>
+            <p id='${doc.id}' class="datePosted">${doc.data().time}</p>
           </section>
           <section id="likeToPost">
           <button type="button" id='${doc.id}' class="btnLike">Like </button>
+          <button type="button" id='${doc.id}' class="btnDelete">Delete </button>
+          <button type="button" id='${doc.id}' class="btnEdit" >Edit </button>
           <p type="text">0</p>
           </section>
           <section id="commentSec"><section id="commentando">
@@ -76,8 +84,37 @@ export default () => {
           </section>
         </section>`;
 
-        // console.log(publicPost);
-        // publicPost.innerHTML += readPost;
+        const btnDelete = readPostSection.querySelector('.btnDelete');
+        // eliminar post
+        btnDelete.addEventListener('click', () => {
+          // eslint-disable-next-line no-alert
+          const confirmar = window.confirm('¿Estás seguro de que deseas borrar este post?');
+          if (confirmar) {
+            deletePost(doc.id);
+            console.log(deletePost(doc.id));
+          }
+        });
+
+        const btnEdit = readPostSection.querySelector('.btnEdit');
+
+        btnEdit.addEventListener('click', () => {
+          // const idPost = doc.data().uid;
+          const publication = writeAndReadPost.querySelector('#contentTextPost');
+          // publication.readOnly = false;
+          const btnGuardar = writeAndReadPost.querySelector('#compartirPost');
+          btnGuardar.innerHTML = 'Guardar';
+          publication.value = doc.data().post;
+          writeAndReadPost.querySelector('#contentTextPost').innerHTML = publication;
+
+          btnGuardar.addEventListener('click', () => {
+            const nuevoText = writeAndReadPost.querySelector('#contentTextPost').value;
+            const actualizacionpost = updatePosts(nuevoText);
+            /* .then(() => {
+                publication.innerHTML = nuevoText;
+              }); */
+            return actualizacionpost;
+          });
+        });
         publicPost.appendChild(readPostSection);
       });
     });

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const db = firebase.firestore();
 export const catchUserInfo = (captureName, captureLastName, captureEmail, captureUid) => {
   db.collection('UserPruebaNadia').add({
@@ -74,30 +75,31 @@ export const onSnapshot2 = () => {
 };
 onSnapshot2();
 
-//  FUNCION PARA COMENTARIOS
-// ----- Agregar/actualizar field en un documento de la colección posts -----
-export const updateDocComment = (postID, commentID, newField) => {
-  const dtb = firebase.firestore();
-  return dtb.collection('posts').doc(postID)
-    .collection('comment')
-    .doc(commentID)
-    .update(newField);
+// para eliminar post
+export const deletePost = (id) => db.collection('postPruebaNadia').doc(id).delete()
+  .then(() => console.log('Documento borrado')) // Documento borrado
+  .catch((error) => console.error('Error eliminando documento', error));
+
+// para editar post
+export const editarPosts = (postText, photoPost, emailPost, uidPost) => {
+  const dataPost = db.collection('postPruebaNadia').doc();
+  return dataPost.update({
+    post: postText,
+    time: firebase.firestore.FieldValue.serverTimestamp(),
+    photo: photoPost,
+    email: emailPost,
+    uid: uidPost,
+  });
 };
 
-export const allComments = (idPost, callback) => firebase.firestore().collection(`posts/${idPost}/comment`)
-  .orderBy('date', 'asc').onSnapshot((querySnapshot) => {
-    const comment = [];
-    querySnapshot.forEach((doc) => {
-      // console.log(doc.id, doc.data());
-      comment.push({ id: doc.id, ...doc.data() });
+export function updatePosts(postText) {
+  return db.collection('postPruebaNadia').doc(doc.uid).update({
+    post: postText,
+    time: new Date().toLocaleString('en-ES'),
+  }).then(() => {
+    console.log('post actualizado');
+  })
+    .catch((error) => {
+      console.error('ocurrio un error al actualizar el post', error);
     });
-    callback(comment);
-    // console.log('Posts: ', post.join(', '));
-  });
-// borrar COMENTARIO
-export const deleteCommentFirebase = (idPost, idComment) => {
-  const dbb = firebase.firestore();
-  return dbb.collection('posts').doc(idPost).collection('comment')
-    .doc(idComment)
-    .delete();
-};
+}
