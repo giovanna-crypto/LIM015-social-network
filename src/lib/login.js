@@ -2,6 +2,9 @@
 import { loginGoogle, loginUser } from '../firebase/firebase-fn.js';
 
 export default () => {
+  // const name = getCurrentUser().name;
+  // const email = getCurrentUser().email;
+  // const password = getCurrentUser().password;
   const loginSection = document.createElement('section');
   loginSection.className = 'loginSection';
   const viewLogin = `
@@ -108,13 +111,35 @@ export default () => {
   //     console.log(e);
   //   });
   // };
+  // ********function logueo email firebase******
+  /* btnLoginGoogle.addEventListener('click', () => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('creación de usuario', name);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }); */
+
+  /* const mail = document.getElementById('email').value;
+  const password = document.getElementById('clave').value; */
 
   btnLoginGoogle.addEventListener('click', (e) => {
     e.preventDefault();
     loginGoogle().then((result) => {
-      console.log(result.user.emailVerified);
+      console.log(result.user);
       if (result.user.emailVerified) {
         window.location.hash = '#/profile';
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            console.log(user, user.displayName);
+            console.log(user.displayName);
+            console.log(user.uid);
+          } else {
+            console.log('error1');
+          }
+        });
       } else {
         window.location.hash = '#/';
       }

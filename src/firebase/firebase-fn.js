@@ -16,6 +16,7 @@ export const loginGoogle = () => {
     .signInWithPopup(providerGoogle);// popup para seleccionar cuenta google
   return loginwithGoogle;
 };
+
 /* **********Función para cerrar sesión con google********** */
 export const logOut = () => {
   firebase.auth().signOut();
