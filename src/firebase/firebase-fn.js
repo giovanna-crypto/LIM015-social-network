@@ -10,6 +10,7 @@ export const registerUser = (email, password) => firebase.auth()
 
 /* **********Función iniciar sesión con google********** */
 export const loginGoogle = () => {
+  // eslint-disable-next-line max-len
   const providerGoogle = new firebase.auth.GoogleAuthProvider();
 
   const loginwithGoogle = firebase.auth()
