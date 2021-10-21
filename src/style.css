@@ -10,7 +10,7 @@ body {
   font-family: "Roboto", sans-serif;
   min-height: 100vh;
 }
-.icontextComment::placeholder{
+.comentario::placeholder{
   background-image: url(./img/comentar.png);
   background-size: 20px 20px;
   background-repeat: no-repeat;

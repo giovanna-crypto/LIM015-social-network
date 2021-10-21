@@ -72,17 +72,14 @@ export default () => {
           <button type="button" id='${doc.id}' class="btnEdit" >Edit </button>
           <p type="text">0</p>
           </section>
-          <section id="commentSec"><section id="commentando">
+        </section>
+        <section id="commentSec"><section id="commentando">
           <img class="userPhotoComment" src="${getCurrentUser().photo === null ? '../img/chica.jpg' : getCurrentUser().photo}" width= "25">
           <form class="formComenta">
-            <input id="commentText-${doc.id}" class="icontextComment" placeholder="Escribe tu comentario..."></input>
-            <section id="userContentComment">
-            <p id='${doc.id}' class="textComment">${doc.data().comment}</p>
-            <p id='${doc.id}' class="dateComment">${getDate(doc.data().time.toDate())}</p>
-          </section>
+            <input id="commentText-${doc.id}" class="comentario" placeholder="Escribe tu comentario..."></input>
             <button type="button" id='comentarPost'>Comentar</button>
-          </section>
-        </section>`;
+
+          </section>`;
 
         const btnDelete = readPostSection.querySelector('.btnDelete');
         // eliminar post
@@ -120,8 +117,6 @@ export default () => {
     });
   };
   getPost();
-  const btnComentar = writeAndReadPost.querySelector('#comentarPost');
-  console.log(btnComentar);
 
   const btnCompartir = writeAndReadPost.querySelector('#compartirPost');
   // console.log(btnCompartir);

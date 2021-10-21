@@ -33,7 +33,7 @@ export const createPost = (postText, photoPost, emailPost, uidPost) => {
       }); */
   });
 };
-/* comentario */
+/* comentario
 export const createComment = (commentText, photoPost, emailPost, uidPost) => {
   // const fieldValue = firebase.firestore.FieldValue;
   db.collection('commentGio').doc().set({
@@ -42,14 +42,15 @@ export const createComment = (commentText, photoPost, emailPost, uidPost) => {
     photo: photoPost,
     email: emailPost,
     uid: uidPost,
-    /* }).then(() => {
+    }).then(() => {
       console.log('publicacion exitosa');
     })
       .catch((error) => {
         console.error(`Error creando el post => ${error}`);
-      }); */
+      });
   });
 };
+*/
 
 /* funcion para traer todos los post */
 export const getEachPostUser = (id) => db.collection('postPruebaNadia')
